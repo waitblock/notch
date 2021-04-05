@@ -1,0 +1,8 @@
+exit
+    Quit Notch.
+help
+    Show this help page.
+help_advanced
+    Show advanced help.
+version
+    Display Notch version details.

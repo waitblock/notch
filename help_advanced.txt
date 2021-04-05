@@ -1,0 +1,12 @@
+exit
+    Quit Notch.
+help
+    Show this help page.
+ping <host>
+    Ping a host server.
+response <host>
+    Get the response code of a host server.
+version
+    Display Notch version details.
+whois <domain>
+    Get the WHOIS details of a domain.

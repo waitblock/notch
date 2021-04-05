@@ -1,0 +1,2 @@
+whois~=0.9.8
+requests~=2.25.1
