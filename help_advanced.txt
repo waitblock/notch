@@ -1,6 +1,10 @@
+dns [-a | -cname | -txt | -mx] <domain>
+    Retrieve the DNS records of a domain. If no record arguments are specified, returns the domain IP address.
 exit
     Quit Notch.
 help
+    Show the help page.
+help_advanced
     Show this help page.
 ping <host>
     Ping a host server.
