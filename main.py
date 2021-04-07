@@ -3,10 +3,15 @@ import subprocess
 import requests
 import dns.resolver
 import socket
+import sys
+import warnings
+
+if sys.platform != "darwin":
+    warnings.warn("This application has only been tested on MacOSX>=10.15.7.")
 
 
 def main():
-    print("Notch 1.0.0 (v1.0.0_1001)")
+    print("Notch 1.0.1 (v1.0.1_1002)")
     print("Type 'help' for help and 'exit' to quit.")
 
     while True:
@@ -24,7 +29,7 @@ def main():
                     print("The requested domain does not exist.")
                 except UnicodeError:
                     print("The requested domain name is too long.")
-            if len(command_args) > 3:
+            if len(command_args) >= 3:
                 print("Fetching records...")
                 record_type = command_args[1]
                 domain_name = command_args[2]
@@ -85,11 +90,12 @@ def main():
                 print("Invalid URL.")
 
         if command == "version":
-            print("Notch version 1.0.0")
-            print("Build 1001")
+            print("Notch version 1.0.1")
+            print("Build 1002")
             print("(c) 2021 Ethan under the MIT License")
 
         if command[0:5] == "whois":
+            print("Querying WHOIS server...")
             try:
                 domain = whois.query(command[6:])
                 print("Domain Name: " + domain.name)
