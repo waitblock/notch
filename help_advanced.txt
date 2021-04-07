@@ -6,6 +6,8 @@ help
     Show the help page.
 help_advanced
     Show this help page.
+ist [-d | -u | -p]
+    Perform an internet speed test.
 ping <host>
     Ping a host server.
 response <host>
