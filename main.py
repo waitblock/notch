@@ -14,7 +14,7 @@ if sys.platform != "darwin":
 
 
 def main():
-    print("Notch 1.2.0 (v1.2.0_1004)")
+    print("Notch 1.2.1 (v1.2.1_1005)")
     print("Type 'help' for help and 'exit' to quit.")
 
     while True:
@@ -178,21 +178,28 @@ def main():
             if command[5:] == "":
                 print("Missing required argument: <host>")
             else:
+                print("Press Ctrl-C to close the connection.")
                 print("Querying server...")
                 try:
-                    with smtplib.SMTP(smtp_server_name, timeout=30) as smtp_server_test:
-                        response = smtp_server_test.noop()
-                        print("The SMTP host server " + smtp_server_name + " returned " + response[1].decode() + " with code " + str(response[0]) + ".")
+                    smtp_server_test = smtplib.SMTP(smtp_server_name, timeout=30)
+                    response = smtp_server_test.noop()
+                    smtp_server_test.close()
+                    print("The SMTP host server " + smtp_server_name + " returned " + response[1].decode() + " with code " + str(response[0]) + ".")
                 except socket.gaierror:
                     print("The host does not exist or is offline.")
                 except socket.timeout:
                     print("The connection timed out.")
                 except ConnectionRefusedError:
                     print("The connection was disconnected or refused by the host.")
+                except KeyboardInterrupt:
+                    try:
+                        smtp_server_test.close()
+                    except UnboundLocalError:
+                        pass
 
         if command == "version":
-            print("Notch version 1.2.0")
-            print("Build 1004")
+            print("Notch version 1.2.1")
+            print("Build 1005")
             print("(c) 2021 Ethan under the MIT License")
 
         if command[0:5] == "whois":
