@@ -8,10 +8,16 @@ help_advanced
     Show this help page.
 ist [-d | -u | -p]
     Perform an internet speed test.
+netcount
+    Display the network input/output counters.
 ping <host>
     Ping a host server.
+port [host] <port>
+    Check if a port is open or closed on a server.
 response <host>
     Get the response code of a host server.
+smtp <host>
+    Test the connection of an SMTP mail server.
 version
     Display Notch version details.
 whois <domain>

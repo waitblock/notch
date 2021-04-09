@@ -4,15 +4,17 @@ import requests
 import dns.resolver
 import socket
 import speedtest
+import psutil
 import sys
 import warnings
+import smtplib
 
 if sys.platform != "darwin":
-    warnings.warn("This application has only been tested on MacOSX>=10.15.7.")
+    warnings.warn("This application is intended for use on MacOSX>=10.15.7.")
 
 
 def main():
-    print("Notch 1.1.0 (v1.1.0_1003)")
+    print("Notch 1.2.0 (v1.2.0_1004)")
     print("Type 'help' for help and 'exit' to quit.")
 
     while True:
@@ -110,6 +112,17 @@ def main():
                     server_ping = speed_test_module.results.ping
                     print("Ping: " + str(server_ping) + "s")
 
+        if command == "netcount":
+            stats = psutil.net_io_counters()
+            print("Total bytes sent: " + str(stats.bytes_sent))
+            print("Total bytes received: " + str(stats.bytes_recv))
+            print("Total packets sent: " + str(stats.packets_sent))
+            print("Total packets received: " + str(stats.packets_recv))
+            print("Total input errors: " + str(stats.errin))
+            print("Total output errors: " + str(stats.errout))
+            print("Total drop inputs: " + str(stats.dropin))
+            print("Total drop outputs: " + str(stats.dropout))
+
         if command[0:4] == "ping":
             print("Pinging host server...")
             ping = subprocess.Popen(
@@ -119,6 +132,35 @@ def main():
             )
             out, error = ping.communicate()
             print(out.decode('utf-8'))
+
+        if command[0:4] == "port":
+            command_args = command.split(" ")
+            if len(command_args) == 1:
+                print("Missing required argument: <port>")
+            if len(command_args) == 2:
+                port = command_args[1]
+                port_testing_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                response = port_testing_socket.connect_ex(('127.0.0.1', int(port)))
+                if response == 0:
+                    print("Port " + port + " on 127.0.0.1 (localhost) is open.")
+                else:
+                    print("Port " + port + " on 127.0.0.1 (localhost) is closed.")
+                port_testing_socket.close()
+            if len(command_args) == 3:
+                try:
+                    host = command_args[1]
+                    port = command_args[2]
+                    port_testing_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    response = port_testing_socket.connect_ex((host, int(port)))
+                    if response == 0:
+                        print("Port " + port + " on " + socket.gethostbyname(host) + " is open.")
+                    else:
+                        print("Port " + port + " on " + socket.gethostbyname(host) + " is closed.")
+                    port_testing_socket.close()
+                except socket.gaierror:
+                    print("The host server does not exist or is offline.")
+            else:
+                print("Maximum number of arguments is 2: [host] <port>")
 
         if command[0:8] == "response":
             try:
@@ -131,9 +173,26 @@ def main():
             except requests.exceptions.InvalidURL:
                 print("Invalid URL.")
 
+        if command[0:4] == "smtp":
+            smtp_server_name = command[5:]
+            if command[5:] == "":
+                print("Missing required argument: <host>")
+            else:
+                print("Querying server...")
+                try:
+                    with smtplib.SMTP(smtp_server_name, timeout=30) as smtp_server_test:
+                        response = smtp_server_test.noop()
+                        print("The SMTP host server " + smtp_server_name + " returned " + response[1].decode() + " with code " + str(response[0]) + ".")
+                except socket.gaierror:
+                    print("The host does not exist or is offline.")
+                except socket.timeout:
+                    print("The connection timed out.")
+                except ConnectionRefusedError:
+                    print("The connection was disconnected or refused by the host.")
+
         if command == "version":
-            print("Notch version 1.1.0")
-            print("Build 1003")
+            print("Notch version 1.2.0")
+            print("Build 1004")
             print("(c) 2021 Ethan under the MIT License")
 
         if command[0:5] == "whois":
