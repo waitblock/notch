@@ -15,7 +15,7 @@ if sys.platform != "darwin":
 
 
 def main():
-    print("Notch 1.3.0 (v1.3.0_1006)")
+    print("Notch 1.3.2 (v1.3.2_1008)")
     print("Type 'help' for help and 'exit' to quit.")
 
     while True:
