@@ -8,13 +8,14 @@ import psutil
 import sys
 import warnings
 import smtplib
+import sslcheck
 
 if sys.platform != "darwin":
     warnings.warn("This application is intended for use on MacOSX>=10.15.7.")
 
 
 def main():
-    print("Notch 1.2.1 (v1.2.1_1005)")
+    print("Notch 1.3.0 (v1.3.0_1006)")
     print("Type 'help' for help and 'exit' to quit.")
 
     while True:
@@ -81,36 +82,37 @@ def main():
                 print(help_advanced_file.read())
 
         if command[0:3] == "ist":
-            command_args = command.split(" ")
-            print("Initializing...")
-            speed_test_module = speedtest.Speedtest()
-            if len(command_args) == 1:
-                print("Testing download speed...")
-                download_speed = speed_test_module.download() / 1000000
-                print("Download Speed: " + str(round(download_speed, 2)) + "Mbit/s")
-                print("Testing upload speed...")
-                upload_speed = speed_test_module.upload() / 1000000
-                print("Upload Speed: " + str(round(upload_speed, 2)) + "Mbit/s")
-                print("Testing server ping...")
-                server_names = []
-                speed_test_module.get_servers(server_names)
-                server_ping = speed_test_module.results.ping
-                print("Ping: " + str(server_ping) + "s")
-            if len(command_args) >= 2:
-                if "-d" in command_args:
-                    print("Testing download speed...")
-                    download_speed = speed_test_module.download() / 1000000
-                    print("Download Speed: " + str(round(download_speed, 2)) + "Mbit/s")
-                if "-u" in command_args:
-                    print("Testing upload speed...")
-                    upload_speed = speed_test_module.upload() / 1000000
-                    print("Upload Speed: " + str(round(upload_speed, 2)) + "Mbit/s")
-                if "-p" in command_args:
-                    print("Testing server ping...")
-                    server_names = []
-                    speed_test_module.get_servers(server_names)
-                    server_ping = speed_test_module.results.ping
-                    print("Ping: " + str(server_ping) + "s")
+            print("This command is currently disabled due to an issue with the speedtest library.")
+            # command_args = command.split(" ")
+            # print("Initializing...")
+            # speed_test_module = speedtest.Speedtest()
+            # if len(command_args) == 1:
+            #     print("Testing download speed...")
+            #     download_speed = speed_test_module.download() / 1000000
+            #     print("Download Speed: " + str(round(download_speed, 2)) + "Mbit/s")
+            #     print("Testing upload speed...")
+            #     upload_speed = speed_test_module.upload() / 1000000
+            #     print("Upload Speed: " + str(round(upload_speed, 2)) + "Mbit/s")
+            #     print("Testing server ping...")
+            #     server_names = []
+            #     speed_test_module.get_servers(server_names)
+            #     server_ping = speed_test_module.results.ping
+            #     print("Ping: " + str(server_ping) + "s")
+            # if len(command_args) >= 2:
+            #     if "-d" in command_args:
+            #         print("Testing download speed...")
+            #         download_speed = speed_test_module.download() / 1000000
+            #         print("Download Speed: " + str(round(download_speed, 2)) + "Mbit/s")
+            #     if "-u" in command_args:
+            #         print("Testing upload speed...")
+            #         upload_speed = speed_test_module.upload() / 1000000
+            #         print("Upload Speed: " + str(round(upload_speed, 2)) + "Mbit/s")
+            #     if "-p" in command_args:
+            #         print("Testing server ping...")
+            #         server_names = []
+            #         speed_test_module.get_servers(server_names)
+            #         server_ping = speed_test_module.results.ping
+            #         print("Ping: " + str(server_ping) + "s")
 
         if command == "netcount":
             stats = psutil.net_io_counters()
@@ -196,6 +198,10 @@ def main():
                         smtp_server_test.close()
                     except UnboundLocalError:
                         pass
+
+        if command[0:3] == "ssl":
+            ssl_server_name = command[4:]
+            sslcheck.main(ssl_server_name)
 
         if command == "version":
             print("Notch version 1.2.1")

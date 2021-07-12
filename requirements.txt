@@ -3,3 +3,6 @@ requests~=2.25.1
 dnspython~=2.1.0
 speedtest-cli~=2.1.2
 psutil~=5.7.3
+idna~=2.10
+cryptography~=3.4.7
+pyOpenSSL~=20.0.1
