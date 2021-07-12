@@ -18,6 +18,8 @@ response <host>
     Get the response code of a host server.
 smtp <host>
     Test the connection of an SMTP mail server.
+ssl <hostname>
+    Get the details of an SSL certificate.
 version
     Display Notch version details.
 whois <domain>
